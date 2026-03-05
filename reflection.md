@@ -7,7 +7,9 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
 - What did the game look like the first time you ran it?
 - List at least two concrete bugs you noticed at the start  
   (for example: "the secret number kept changing" or "the hints were backwards").
-
+-> the hints were backwards(Hints don't match the guess)
+->For easy level of difficulty should have more allowed attempt than normal. And range should me more for Hard level than normal
+->
 ---
 
 ## 2. How did you use AI as a teammate?
