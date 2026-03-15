@@ -16,6 +16,7 @@ difficulty = st.sidebar.selectbox(
 )
 
 # FIXME: Logic breaks here — Easy (6) had fewer attempts than Normal (8), making it harder than Easy
+# FIX: Changed Easy from 6 to 10 attempts — identified and corrected with Claude Code (AI teammate)
 attempt_limit_map = {
     "Easy": 10,
     "Normal": 8,

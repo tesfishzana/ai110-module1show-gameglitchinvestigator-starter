@@ -1,3 +1,4 @@
+# FIX: Hard range was 1–50 (narrower than Normal 1–100) — corrected to 1–200 with Claude Code
 def get_range_for_difficulty(difficulty: str):
     """Return (low, high) inclusive range for a given difficulty."""
     if difficulty == "Easy":
@@ -29,6 +30,7 @@ def parse_guess(raw: str):
     return True, value, None
 
 
+# FIX: Refactored from app.py into logic_utils.py using Claude Code Agent mode
 def check_guess(guess, secret):
     """
     Compare guess to secret and return (outcome, message).
@@ -37,6 +39,7 @@ def check_guess(guess, secret):
     """
     if guess == secret:
         return "Win", "🎉 Correct!"
+    # FIX: Hint messages were swapped — "Go HIGHER/LOWER" were backwards; corrected with Claude Code
     try:
         if guess > secret:
             return "Too High", "📉 Go LOWER!"

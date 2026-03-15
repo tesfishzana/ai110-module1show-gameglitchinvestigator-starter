@@ -18,10 +18,10 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
   -> I used Claude Code as my AI assistant throughout the project.
 
 - Give one example of an AI suggestion that was correct (including what the AI suggested and how you verified the result).
-  -> Claude correctly identified three logic bugs in `app.py`: the swapped hint messages in `check_guess` (including the `TypeError` fallback path), the Hard difficulty range being too narrow, and the Easy attempt limit being lower than Normal. I verified each fix by reading the corrected code and manually tracing through the logic to confirm the behavior matched what was expected.
+  -> Claude correctly identified that the hint messages in `check_guess()` were swapped — it suggested changing `guess > secret` to return "Go LOWER!" instead of "Go HIGHER!", and applying the same fix to the `TypeError` fallback path. I verified this was correct by manually tracing through the logic: if your guess is higher than the secret, you need to go lower, not higher. I also ran the app and submitted a guess above the secret number to confirm the hint now pointed in the right direction.
 
 - Give one example of an AI suggestion that was incorrect or misleading (including what the AI suggested and how you verified the result).
-  -> Claude sometimes provided more detail and explanation than necessary, making it harder to quickly identify the key fix. I had to filter through lengthy explanations to extract the actual code change needed. This taught me to ask more focused, targeted questions to get cleaner responses.
+  -> When asked to refactor the functions into `logic_utils.py`, Claude initially left the functions as `NotImplementedError` stubs and did not implement them, which caused all pytest tests to fail with errors rather than pass. I discovered this was wrong when I ran `pytest tests/test_game_logic.py -v` and saw `NotImplementedError` in the traceback. I had to go back and ask Claude to actually implement the functions by copying the correct logic from `app.py` into `logic_utils.py`.
 
 ---
 
