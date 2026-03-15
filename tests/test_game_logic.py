@@ -1,4 +1,4 @@
-from logic_utils import check_guess, get_range_for_difficulty
+from logic_utils import check_guess, get_range_for_difficulty, parse_guess, update_score
 
 def test_winning_guess():
     # If the secret is 50 and guess is 50, it should be a win
@@ -51,3 +51,25 @@ def test_easy_has_more_attempts_than_normal():
     assert attempt_limit_map["Easy"] > attempt_limit_map["Normal"], (
         f"Easy ({attempt_limit_map['Easy']}) should have more attempts than Normal ({attempt_limit_map['Normal']})"
     )
+
+
+# --- Refactor tests: logic_utils.py must have real implementations, not NotImplementedError stubs ---
+
+def test_parse_guess_is_implemented():
+    # Was raising NotImplementedError before refactor
+    ok, value, err = parse_guess("42")
+    assert ok is True
+    assert value == 42
+    assert err is None
+
+def test_parse_guess_invalid_input_is_implemented():
+    ok, value, err = parse_guess("abc")
+    assert ok is False
+    assert value is None
+    assert err is not None
+
+def test_update_score_is_implemented():
+    # Was raising NotImplementedError before refactor
+    new_score = update_score(0, "Win", 1)
+    assert isinstance(new_score, int)
+    assert new_score > 0
