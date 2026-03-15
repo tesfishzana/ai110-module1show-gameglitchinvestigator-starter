@@ -57,10 +57,12 @@ Four new pytest cases were added to specifically catch each bug:
 - [ ] [Insert a screenshot of your fixed, winning game here]
 
 ### 🧪 Pytest Results (Challenge 1: Advanced Edge-Case Testing)
-
+![alt text](<Advanced Edge-Case Testing.png>)
 > **Note:** Screenshot of passing pytest results — take a screenshot of your terminal after running `pytest tests/test_game_logic.py -v` and insert it below once `logic_utils.py` functions are implemented.
 
-- [ ] [Insert pytest screenshot here]
+- [ ] [
+   ![alt text](pytest.png)
+]
 
 ## 🚀 Stretch Features
 
