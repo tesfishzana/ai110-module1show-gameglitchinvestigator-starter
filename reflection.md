@@ -7,35 +7,41 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
 - What did the game look like the first time you ran it?
 - List at least two concrete bugs you noticed at the start
   (for example: "the secret number kept changing" or "the hints were backwards").
-  -> The first bug was that the hints were completely backwards — when my guess was too high, the game told me to go higher, and when it was too low, it told me to go lower, making the game unwinnable by following the hints.
-  -> The second bug was in the difficulty settings: Easy allowed fewer attempts than Normal, and the Hard difficulty had a smaller number range (1–50) than Normal (1–100), which meant Hard was actually easier than Normal in terms of range.
+
+When I first ran the game, it looked like a normal guessing game but it was impossible to win by following the hints. The first thing I noticed was that the hints were completely backwards — every time I guessed too high, the game told me to go higher, which sent me in the wrong direction every single time. The second bug I caught was in the difficulty settings: Easy was actually harder than Normal because it gave you fewer attempts (6 vs 8), and Hard had a smaller range (1–50) than Normal (1–100), which made Hard easier than Normal. These bugs made the whole difficulty system feel broken and confusing.
 
 ---
 
 ## 2. How did you use AI as a teammate?
 
 - Which AI tools did you use on this project (for example: ChatGPT, Gemini, Copilot)?
-  -> I used Claude Code as my AI assistant throughout the project.
+
+I used Claude Code as my AI assistant for this entire project — for reading code, fixing bugs, writing tests, and updating documentation.
 
 - Give one example of an AI suggestion that was correct (including what the AI suggested and how you verified the result).
-  -> Claude correctly identified that the hint messages in `check_guess()` were swapped — it suggested changing `guess > secret` to return "Go LOWER!" instead of "Go HIGHER!", and applying the same fix to the `TypeError` fallback path. I verified this was correct by manually tracing through the logic: if your guess is higher than the secret, you need to go lower, not higher. I also ran the app and submitted a guess above the secret number to confirm the hint now pointed in the right direction.
+
+Claude correctly spotted that the hint messages inside `check_guess()` were swapped. It suggested flipping the return values so that `guess > secret` returns "Go LOWER!" and `guess < secret` returns "Go HIGHER!" — and it caught that the same swap needed to happen in the `TypeError` fallback path too, which I would have easily missed. I verified this by tracing through the logic myself: if my guess is above the secret number, I obviously need to go lower. I then ran the app, typed a guess that I knew was above the secret using the debug panel, and confirmed the hint said "Go LOWER" as expected.
 
 - Give one example of an AI suggestion that was incorrect or misleading (including what the AI suggested and how you verified the result).
-  -> When asked to refactor the functions into `logic_utils.py`, Claude initially left the functions as `NotImplementedError` stubs and did not implement them, which caused all pytest tests to fail with errors rather than pass. I discovered this was wrong when I ran `pytest tests/test_game_logic.py -v` and saw `NotImplementedError` in the traceback. I had to go back and ask Claude to actually implement the functions by copying the correct logic from `app.py` into `logic_utils.py`.
+
+When I asked Claude to refactor the functions into `logic_utils.py`, it left all four functions as `raise NotImplementedError(...)` stubs instead of actually implementing them. At first glance the file looked fine — the functions were there with the right names. But when I ran `pytest tests/test_game_logic.py -v`, every single test crashed with `NotImplementedError`. I had to go back and specifically tell Claude to implement the functions by moving the real logic from `app.py` into `logic_utils.py`. This taught me to always run the tests immediately after any AI-assisted refactor, not just look at the code.
 
 ---
 
 ## 3. Debugging and testing your fixes
 
 - How did you decide whether a bug was really fixed?
-  -> I verified each fix in two ways: first by reading the corrected code and tracing through the logic manually to confirm it made sense, and second by running the app and testing the specific behavior that was broken — for example, submitting a guess that was too high and checking that the hint correctly said "Go LOWER."
+
+I used two checks for every fix. First I read the corrected code and traced through it manually to make sure the logic made sense to me before trusting it. Then I tested the actual behavior in the running app — for the hints bug I submitted guesses above and below the secret and watched whether the hint pointed me in the right direction. Seeing it work in the real app gave me much more confidence than just reading the code.
 
 - Describe at least one test you ran (manual or using pytest)
   and what it showed you about your code.
-  -> I added 4 new pytest tests to `test_game_logic.py`, each targeting a specific bug. For example, `test_too_high_message_says_go_lower` calls `check_guess(60, 50)` and asserts that the message contains "LOWER." This test would have caught the original bug immediately, since the old code returned "Go HIGHER!" in that case.
+
+I added 4 new pytest tests to `test_game_logic.py` that each targeted one specific bug. The most useful one was `test_too_high_message_says_go_lower`, which calls `check_guess(60, 50)` and asserts the message contains "LOWER". When I looked at the original tests, none of them checked the message at all — they only checked the outcome label like "Too High". That gap is exactly where the bug was hiding, so the new test would have caught it immediately if it had existed before.
 
 - Did AI help you design or understand any tests? How?
-  -> Yes. I asked Claude to write pytest cases specifically targeting each bug I had fixed. Claude structured each test to unpack both the outcome and the message from `check_guess`, which helped me understand that the existing tests were only checking the outcome label and completely missing the message — the exact place where the bug was hiding.
+
+Yes — I asked Claude to write pytest cases specifically targeting each bug I fixed. The most useful thing Claude did was show me to unpack the tuple as `outcome, message = check_guess(...)` instead of comparing the whole return value to a string, which is what the original tests were doing wrong. That one change helped me understand why all the original tests were passing even when the hints were broken — they never checked the message half of the tuple at all.
 
 ---
 
